@@ -2,14 +2,28 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'sinatra'
+require 'pp'
 
 $pings = []
 
 get '/' do
-  "Sinatra up and running with #{$pings.size} pings"
+  erb :index
 end
 
 post '/ping' do
   $pings << params
 end
+
+__END__
+
+@@ index
+
+<html>
+  <body>
+    <% $pings.each do |ping| %>
+      <pre><%= $ping.pretty_inspect %></pre>
+      <hr>
+    <% end %>
+  </body>
+</html>
 
