@@ -11,7 +11,7 @@ get '/' do
 end
 
 post '/ping' do
-  $pings << params
+  $pings << request.body.string
 end
 
 __END__
@@ -21,7 +21,7 @@ __END__
 <html>
   <body>
     <% $pings.each do |ping| %>
-      <pre><%= $ping.pretty_inspect %></pre>
+      <pre><%= $ping %></pre>
       <hr>
     <% end %>
   </body>
