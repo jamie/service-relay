@@ -4,25 +4,29 @@ require 'bundler/setup'
 require 'sinatra'
 require './lib/pivotal_ping'
 
-$pings = []
+if File.exist?('./env')
+  File.read('./env').each_line do |line|
+    k,v = line.chomp.split('=', 2)
+    ENV[k] = v
+  end
+end
 
 get '/' do
   erb :index
 end
 
 post '/ping' do
-  $pings << PivotalPing.new(request.body.read)
+  ping = PivotalPing.new(request.body.read)
+  unless ping.description =~ /^[^"].*edited "/
+    hipchat = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
+    hipchat[ENV['HIPCHAT_ROOM']].send('Pivotal Tracker', ping.description)
+  end
+  ''
 end
 
 __END__
 
 @@ index
 
-<html>
-  <body>
-    <% $pings.each do |ping| %>
-    <pre><%= "%10s %10s %s %s" % [ping.id, ping.event_type, ping.description, ping.story_ids.join(',')] %></pre>
-    <% end %>
-  </body>
-</html>
+<html><body>No content</body></html>
 

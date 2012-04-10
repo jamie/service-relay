@@ -7,10 +7,16 @@ GEM
       netrc (~> 0.7.1)
       rest-client (~> 1.6.1)
       rubyzip
-    json (1.6.6)
+    hipchat (0.4.1)
+      httparty
+    httparty (0.8.1)
+      multi_json
+      multi_xml
     launchy (2.1.0)
       addressable (~> 2.2.6)
     mime-types (1.18)
+    multi_json (1.2.0)
+    multi_xml (0.4.2)
     netrc (0.7.1)
     nokogiri (1.5.2)
     rack (1.4.1)
@@ -30,6 +36,6 @@ PLATFORMS
 
 DEPENDENCIES
   heroku
-  json
+  hipchat
   nokogiri
   sinatra
