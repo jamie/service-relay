@@ -11,7 +11,7 @@ get '/' do
 end
 
 post '/ping' do
-  $pings << request.body
+  $pings << request.body.read
 end
 
 __END__
