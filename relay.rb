@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'sinatra'
+require 'lib/pivotal_ping'
 require 'pp'
 
 $pings = []
@@ -11,7 +12,7 @@ get '/' do
 end
 
 post '/ping' do
-  $pings << request.body.read
+  $pings << PivotalPing.new(request.body.read)
 end
 
 __END__
@@ -20,7 +21,8 @@ __END__
 
 <html>
   <body>
-    <pre><%= $pings.pretty_inspect %></pre>
+    <% $pings.each do |ping| %>
+    <pre><%= "%10s %10s %s %s" % [ping.id, ping.event_type, ping.description, ping.story_ids.join(',')] %></pre>
   </body>
 </html>
 
