@@ -1,0 +1,9 @@
+A quick and dirty middleman for getting updates from Pivotal Tracker into HipChat, but with all the noise of edits, reordering, and comments filtered out. Just new tickets and progress updates.
+
+Set up to run direct on heroku, just clone and set up a (bamboo) Heroku app, and set up the following environment keys via heroku config:add:
+
+    HIPCHAT_TOKEN - api token from hipchat, notification-only expected
+    HIPCHAT_ROOM - name of the room to dump updates into
+
+If you want to run not on Heroku, you can provide those two variables in a file called `env` in the project root, the format is `KEY=value`, one per line, no spaces or padding.
+
