@@ -2,12 +2,14 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'sinatra'
+require 'hipchat'
 require './lib/pivotal_ping'
 
 if File.exist?('./env')
   File.read('./env').each_line do |line|
     k,v = line.chomp.split('=', 2)
-    ENV[k] = v
+    p [k,v]
+    ENV[k] = v if k
   end
 end
 
