@@ -2,8 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'sinatra'
-require 'lib/pivotal_ping'
-require 'pp'
+require './lib/pivotal_ping'
 
 $pings = []
 
