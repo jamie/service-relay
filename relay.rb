@@ -22,6 +22,7 @@ __END__
   <body>
     <% $pings.each do |ping| %>
     <pre><%= "%10s %10s %s %s" % [ping.id, ping.event_type, ping.description, ping.story_ids.join(',')] %></pre>
+    <% end %>
   </body>
 </html>
 
