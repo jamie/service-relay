@@ -8,7 +8,6 @@ require './lib/pivotal_ping'
 if File.exist?('./env')
   File.read('./env').each_line do |line|
     k,v = line.chomp.split('=', 2)
-    p [k,v]
     ENV[k] = v if k
   end
 end
