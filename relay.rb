@@ -20,7 +20,8 @@ post '/ping' do
   ping = PivotalPing.new(request.body.read)
   unless ping.description =~ /^[^"].*edited "/
     hipchat = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
-    hipchat[ENV['HIPCHAT_ROOM']].send('Pivotal Tracker', ping.description)
+    room = ENV['HIPCHAT_ROOM'].gsub('_', ' ')
+    hipchat[room].send('Pivotal Tracker', ping.description)
   end
   ''
 end
