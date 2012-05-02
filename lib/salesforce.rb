@@ -27,7 +27,7 @@ class Salesforce
         'X-PrettyPrint' => '1'
       }
     )
-    JSON.parse(@response.body)["records"]
+    @response["records"]
   end
 
   def session_id

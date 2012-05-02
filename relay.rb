@@ -3,10 +3,8 @@ require 'bundler/setup'
 
 require 'sinatra'
 require 'hipchat'
-require 'savon'
 require 'httparty'
 require 'time'
-require 'json'
 
 require './lib/pivotal_ping'
 require './lib/salesforce'
