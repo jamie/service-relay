@@ -1,7 +1,7 @@
 class Salesforce
   OAUTH_ENDPOINT = "https://login.salesforce.com/services/oauth2/authorize"
   TOKEN_ENDPOINT = "https://login.salesforce.com/services/oauth2/token"
-  API_BASE = "https://na4-api.salesforce.com/services/data/v24.0"
+  API_BASE = "https://#{ENV['SF_SERVER']}/services/data/v24.0"
 
   def login!
     @auth_response ||= HTTParty.post(
