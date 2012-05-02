@@ -1,6 +1,7 @@
 class Salesforce
   OAUTH_ENDPOINT = "https://login.salesforce.com/services/oauth2/authorize"
   TOKEN_ENDPOINT = "https://login.salesforce.com/services/oauth2/token"
+  API_BASE = "https://na4-api.salesforce.com/services/data/v24.0"
 
   def login!
     @auth_response ||= HTTParty.post(
@@ -16,7 +17,7 @@ class Salesforce
   end
 
   def get_cases
-    url = "https://na4-api.salesforce.com/services/data/v24.0/query/"
+    url = "#{API_BASE}/query/"
     query = "SELECT id, subject, description, createddate, " +
       "suppliedname, status from Case where Status LIKE 'Escalated%'"
     @response = HTTParty.get(
