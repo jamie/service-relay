@@ -22,7 +22,7 @@ class PivotalPing
     end
   end
 
-  attr_reader :id, :version, :event_type, :occurred_at, :author, :project_id, :description
+  attr_reader :id, :version, :event_type, :occurred_at, :author, :project_id, :description, :stories
 
   def initialize(post_string)
 puts post_string
