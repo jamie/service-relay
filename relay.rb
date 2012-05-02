@@ -16,6 +16,11 @@ if File.exist?('./env')
   end
 end
 
+use Rack::Auth::Basic, "Restricted Area" do |user, pass|
+  [user, pass] == ['pivotal', 'password']
+end
+
+
 helpers do
   def h(text)
     text.gsub('<', '%3C').gsub('>','%3E')
