@@ -77,7 +77,7 @@ __END__
     <requested_by><%= c['SuppliedName'] %></requested_by>
     <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
     <story_type><%= story_type(c['Status']) %></story_type>
-    <estimate type="integer"></estimate>
+    <estimate type="integer">-1</estimate>
   </external_story>
 <% end %>
 </external_stories>

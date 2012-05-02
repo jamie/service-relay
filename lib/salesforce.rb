@@ -33,16 +33,17 @@ class Salesforce
 
   def process_update(update)
     pp update
-    return # Unless integration type matches
+    story = update.stories.first
+    return unless story && story.integration_id == 13419
     # In theory?
     #url = "#{API_BASE}/sobjects/CaseComment"
     #HTTParty.post(
     #  url,
-    #  :body => {
-    #    "ParentId"    => '', # external id
-    #    "IsPublished" => false,
-    #    "CommentBody" => "An update from Pivotal Tracker!\n"+ ''# message body
-    #  }
+    pp  :body => {
+        "ParentId"    => story.other_id, # external id
+        "IsPublished" => false,
+        "CommentBody" => "An update from Pivotal Tracker!\n"+ update.description
+      }#,
     #  :headers => {
     #    'Authorization' => "OAuth #{session_id}",
     #    'Content-Type'  => 'application/json',

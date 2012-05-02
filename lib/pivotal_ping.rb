@@ -4,12 +4,14 @@ require 'pp'
 
 class PivotalPing
   class PivotalStory
-    attr_reader :id, :url, :state
+    attr_reader :id, :url, :state, :integration_id, :other_id
 
     def initialize(xml)
       @id    = xml.xpath('id').first.content.to_i
       @url   = xml.xpath('url').first.content
       @state = xml.xpath('current_state').first.content rescue ''
+      @integration_id = xml.xpath('integration_id').first.content rescue nil
+      @other_id = xml.xpath('other_id').first.content rescue nil
     end
 
     def to_hash
