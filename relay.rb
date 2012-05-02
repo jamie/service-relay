@@ -49,7 +49,7 @@ end
 
 post '/pivotal/webhook' do
   ping = PivotalPing.new(request.body.read)
-  HipChatNotifier.new.process(ping)
+  HipchatNotifier.new.process(ping)
   Salesforce.new.process_update(ping)
   'OK'
 end
