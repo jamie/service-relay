@@ -32,9 +32,8 @@ class Salesforce
   end
 
   def process_update(update)
-    pp update
     story = update.stories.first
-    return unless story && story.integration_id == 13419
+    return unless story && story.integration_id == ENV['PIVOTAL_SF_INTEGRATION_ID']
     # In theory?
     #url = "#{API_BASE}/sobjects/CaseComment"
     #HTTParty.post(
