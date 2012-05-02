@@ -23,6 +23,7 @@ class PivotalPing
   attr_reader :id, :version, :event_type, :occurred_at, :author, :project_id, :description
 
   def initialize(post_string)
+puts post_string
     xml = Nokogiri.XML(post_string)
     @id          = xml.xpath('activity/id').first.content.to_i
     @version     = xml.xpath('activity/version').first.content.to_i
