@@ -9,7 +9,7 @@ class PivotalPing
     def initialize(xml)
       @id    = xml.xpath('id').first.content.to_i
       @url   = xml.xpath('url').first.content
-      @state = xml.xpath('current_state').first.content
+      @state = xml.xpath('current_state').first.content rescue ''
     end
 
     def to_hash
