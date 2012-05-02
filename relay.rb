@@ -25,6 +25,13 @@ helpers do
   def h(text)
     text.gsub('<', '%3C').gsub('>','%3E')
   end
+
+  def story_type(k)
+    { 'Escalated--Defect'  => 'bug',
+      'Escalated--Feature' => 'feature',
+      'Escalated--Task'    => 'chore'
+    }[k]
+  end
 end
 
 get '/' do
@@ -65,7 +72,7 @@ __END__
     <description><%= h c['Description'] %></description>
     <requested_by><%= c['SuppliedName'] %></requested_by>
     <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
-    <story_type><%= c['Status'].split('--').last.downcase %></story_type>
+    <story_type><%= story_type(c['Status']) %></story_type>
     <estimate type="integer"></estimate>
   </external_story>
 <% end %>
