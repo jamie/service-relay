@@ -7,9 +7,9 @@ require 'savon'
 require 'httparty'
 require 'time'
 require 'json'
-require 'cgi'
 
 require './lib/pivotal_ping'
+require './lib/salesforce'
 
 if File.exist?('./env')
   File.read('./env').each_line do |line|
@@ -18,13 +18,21 @@ if File.exist?('./env')
   end
 end
 
+helpers do
+  def h(text)
+    text.gsub('<', '%3C').gsub('>','%3E')
+  end
+end
+
 get '/' do
   erb :index
 end
 
-# TODO: change to '/pivotal/to/hipchat'
+# TODO: change to '/pivotal/webhook'
 post '/ping' do
   ping = PivotalPing.new(request.body.read)
+  # HipChatNotifier.process(ping)
+  # SalesforceUpdater.process(ping)
   unless ping.description =~ /^[^"].*edited "/
     hipchat = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
     room = ENV['HIPCHAT_ROOM'].gsub('_', ' ')
@@ -33,44 +41,9 @@ post '/ping' do
   ''
 end
 
-class Salesforce
-  def initialize
-    @soap_client = Savon::Client.new do
-      wsdl.document = File.expand_path("../lib/salesforce_partner.wsdl", __FILE__)
-    end
-  end
-
-  def login!
-    @soap_client.request :login do
-      soap.body = {
-        :username => ENV['SALESFORCE_LOGIN'],
-        :password => ENV['SALESFORCE_PASSWORD'] + ENV['SALESFORCE_TOKEN']
-      }
-    end
-  end
-
-  def get_cases
-    url = "https://na4-api.salesforce.com/services/data/v24.0/query/"
-    query = "SELECT id, subject, description, createddate, " +
-      "suppliedname, status from Case where Status LIKE 'Escalated%'"
-    response = HTTParty.get(
-      url,
-      :query => { :q => query },
-      :headers => {
-        'Authorization' => "OAuth #{session_id}",
-        'X-PrettyPrint' => '1'
-      }
-    )
-    puts response.code
-    JSON.parse(response.body)["records"]
-  end
-
-  def session_id
-    ''
-  end
-
+get '/salesforce/oauth' do
+  Salesforce.new.login!
 end
-
 
 get '/salesforce/to/pivotal' do
   @cases = Salesforce.new.get_cases
@@ -78,16 +51,9 @@ get '/salesforce/to/pivotal' do
   erb :pt_import_xml
 end
 
-#require 'pp'
-#force = Salesforce.new
-#force.login!
-#force.logout!
-#exit(1)
-
 __END__
 
 @@ index
-
 <html><body>No content</body></html>
 
 @@ pt_import_xml
@@ -97,7 +63,7 @@ __END__
   <external_story>
     <external_id><%= c['Id'] %></external_id>
     <name><%= c['Subject'] %></name>
-    <description><%= CGI.escape c['Description'] %></description>
+    <description><%= h c['Description'] %></description>
     <requested_by><%= c['SuppliedName'] %></requested_by>
     <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
     <story_type><%= c['Status'].split('--').last.downcase %></story_type>
@@ -105,3 +71,4 @@ __END__
   </external_story>
 <% end %>
 </external_stories>
+
