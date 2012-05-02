@@ -6,6 +6,7 @@ require 'hipchat'
 require 'httparty'
 require 'time'
 
+require './lib/hipchat_notifier'
 require './lib/pivotal_ping'
 require './lib/salesforce'
 
@@ -48,13 +49,8 @@ end
 
 post '/pivotal/webhook' do
   ping = PivotalPing.new(request.body.read)
-  # HipChatNotifier.process(ping)
-  unless ping.description =~ /^[^"].*edited "/
-    hipchat = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
-    room = ENV['HIPCHAT_ROOM'].gsub('_', ' ')
-    hipchat[room].send('Pivotal Tracker', ping.description)
-  end
-  # SalesforceUpdater.process(ping)
+  HipChatNotifier.new.process(ping)
+  # Salesforce.new.process_update(ping)
   'OK'
 end
 
