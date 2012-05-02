@@ -41,10 +41,6 @@ post '/ping' do
   ''
 end
 
-get '/salesforce/oauth' do
-  Salesforce.new.login!
-end
-
 get '/salesforce/to/pivotal' do
   @cases = Salesforce.new.get_cases
   content_type 'application/json'

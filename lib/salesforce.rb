@@ -2,10 +2,6 @@ class Salesforce
   OAUTH_ENDPOINT = "https://login.salesforce.com/services/oauth2/authorize"
   TOKEN_ENDPOINT = "https://login.salesforce.com/services/oauth2/token"
 
-  def initialize
-    login!
-  end
-
   def login!
     @auth_response ||= HTTParty.post(
       TOKEN_ENDPOINT,
@@ -35,6 +31,7 @@ class Salesforce
   end
 
   def session_id
+    login!
     @auth_response["access_token"]
   end
 end
