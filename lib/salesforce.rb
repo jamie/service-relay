@@ -36,19 +36,19 @@ class Salesforce
     return # Unless integration type matches
     # In theory?
     #url = "#{API_BASE}/sobjects/CaseComment"
-    HTTParty.post(
-      url,
-      :body => {
-        "ParentId" => # external id
-        "IsPublished" => false,
-        "CommentBody" => "An update from Pivotal Tracker!\n"+# message body
-      }
-      :headers => {
-        'Authorization' => "OAuth #{session_id}",
-        'Content-Type'  => 'application/json',
-        'X-PrettyPrint' => '1'
-      }
-    )
+    #HTTParty.post(
+    #  url,
+    #  :body => {
+    #    "ParentId"    => '', # external id
+    #    "IsPublished" => false,
+    #    "CommentBody" => "An update from Pivotal Tracker!\n"+ ''# message body
+    #  }
+    #  :headers => {
+    #    'Authorization' => "OAuth #{session_id}",
+    #    'Content-Type'  => 'application/json',
+    #    'X-PrettyPrint' => '1'
+    #  }
+    #)
   end
 
   def session_id
