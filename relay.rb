@@ -7,6 +7,7 @@ require 'savon'
 require 'httparty'
 require 'time'
 require 'json'
+require 'cgi'
 
 require './lib/pivotal_ping'
 
@@ -96,7 +97,7 @@ __END__
   <external_story>
     <external_id><%= c['Id'] %></external_id>
     <name><%= c['Subject'] %></name>
-    <description><%= c['Description'] %></description>
+    <description><%= CGI.escape c['Description'] %></description>
     <requested_by></requested_by>
     <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
     <story_type><%= c['Status'].split('--').last.downcase %></story_type>
