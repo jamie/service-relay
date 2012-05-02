@@ -98,7 +98,7 @@ __END__
     <external_id><%= c['Id'] %></external_id>
     <name><%= c['Subject'] %></name>
     <description><%= CGI.escape c['Description'] %></description>
-    <requested_by></requested_by>
+    <requested_by><%= c['SuppliedName'] %></requested_by>
     <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
     <story_type><%= c['Status'].split('--').last.downcase %></story_type>
     <estimate type="integer"></estimate>
