@@ -38,17 +38,16 @@ get '/' do
   erb :index
 end
 
-# TODO: change to '/pivotal/webhook'
-post '/ping' do
+post '/pivotal/webhook' do
   ping = PivotalPing.new(request.body.read)
   # HipChatNotifier.process(ping)
-  # SalesforceUpdater.process(ping)
   unless ping.description =~ /^[^"].*edited "/
     hipchat = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
     room = ENV['HIPCHAT_ROOM'].gsub('_', ' ')
     hipchat[room].send('Pivotal Tracker', ping.description)
   end
-  ''
+  # SalesforceUpdater.process(ping)
+  'OK'
 end
 
 get '/salesforce/to/pivotal' do
