@@ -16,11 +16,6 @@ if File.exist?('./env')
   end
 end
 
-use Rack::Auth::Basic, "Restricted Area" do |user, pass|
-  [user, pass] == ['pivotal', 'password']
-end
-
-
 helpers do
   def h(text)
     text.gsub('<', '%3C').gsub('>','%3E')
@@ -32,6 +27,19 @@ helpers do
       'Escalated--Task'    => 'chore'
     }[k]
   end
+
+  def protected!
+    unless authorized?
+      response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
+      throw(:halt, [401, "Not authorized\n"])
+    end
+  end
+
+  def authorized?
+    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['pivotal', 'password']
+  end
+
 end
 
 get '/' do
@@ -51,6 +59,7 @@ post '/pivotal/webhook' do
 end
 
 get '/salesforce/to/pivotal' do
+  protected!
   @cases = Salesforce.new.get_cases
   content_type 'application/json'
   erb :pt_import_xml
