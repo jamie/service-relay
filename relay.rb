@@ -7,12 +7,7 @@ require 'httparty'
 require 'time'
 require 'json'
 
-if File.exist?('./env')
-  File.read('./env').each_line do |line|
-    k,v = line.chomp.split('=', 2)
-    ENV[k] = v if k
-  end
-end
+require './lib/load_dev_env'
 
 require './lib/hipchat_notifier'
 require './lib/pivotal_ping'
