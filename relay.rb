@@ -5,6 +5,7 @@ require 'sinatra'
 require 'hipchat'
 require 'httparty'
 require 'time'
+require 'json'
 
 if File.exist?('./env')
   File.read('./env').each_line do |line|

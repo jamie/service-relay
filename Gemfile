@@ -5,4 +5,5 @@ gem 'heroku'
 gem 'nokogiri'
 gem 'hipchat'
 gem 'httparty'
+gem 'json'
 

@@ -16,6 +16,23 @@ class Salesforce
     )
   end
 
+  def add_case_comment(id, message)
+    url = "#{API_BASE}/sobjects/CaseComment"
+    HTTParty.post(
+      url,
+      :body => {
+        "ParentId"    => id,
+        "IsPublished" => false,
+        "CommentBody" => message
+      }.to_json,
+      :headers => {
+        'Authorization' => "OAuth #{session_id}",
+        'Content-Type'  => 'application/json',
+        'X-PrettyPrint' => '1'
+      }
+    )
+  end
+
   def get_cases
     url = "#{API_BASE}/query/"
     query = "SELECT id, subject, description, createddate, " +
@@ -34,22 +51,7 @@ class Salesforce
   def process_update(update)
     story = update.stories.first
     return unless story && story.integration_id == ENV['PIVOTAL_SF_INTEGRATION_ID'].to_i
-    pp story
-    # In theory?
-    url = "#{API_BASE}/sobjects/CaseComment"
-    pp HTTParty.post(
-      url,
-      :body => {
-        "ParentId"    => story.other_id, # external id
-        "IsPublished" => false,
-        "CommentBody" => "An update from Pivotal Tracker!\n"+ update.description
-      },
-      :headers => {
-        'Authorization' => "OAuth #{session_id}",
-        'Content-Type'  => 'application/json',
-        'X-PrettyPrint' => '1'
-      }
-    )
+    add_case_comment(story.other_id, "An update from Pivotal Tracker!\n"+update.description)
   end
 
   def session_id
