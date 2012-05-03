@@ -33,7 +33,7 @@ class Salesforce
 
   def process_update(update)
     story = update.stories.first
-    return unless story && story.integration_id == ENV['PIVOTAL_SF_INTEGRATION_ID']
+    return unless story && story.integration_id == ENV['PIVOTAL_SF_INTEGRATION_ID'].to_i
     pp story
     # In theory?
     url = "#{API_BASE}/sobjects/CaseComment"
