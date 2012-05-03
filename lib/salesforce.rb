@@ -34,21 +34,22 @@ class Salesforce
   def process_update(update)
     story = update.stories.first
     return unless story && story.integration_id == ENV['PIVOTAL_SF_INTEGRATION_ID']
+    pp story
     # In theory?
-    #url = "#{API_BASE}/sobjects/CaseComment"
-    #HTTParty.post(
-    #  url,
-    pp  :body => {
+    url = "#{API_BASE}/sobjects/CaseComment"
+    pp HTTParty.post(
+      url,
+      :body => {
         "ParentId"    => story.other_id, # external id
         "IsPublished" => false,
         "CommentBody" => "An update from Pivotal Tracker!\n"+ update.description
-      }#,
-    #  :headers => {
-    #    'Authorization' => "OAuth #{session_id}",
-    #    'Content-Type'  => 'application/json',
-    #    'X-PrettyPrint' => '1'
-    #  }
-    #)
+      },
+      :headers => {
+        'Authorization' => "OAuth #{session_id}",
+        'Content-Type'  => 'application/json',
+        'X-PrettyPrint' => '1'
+      }
+    )
   end
 
   def session_id
