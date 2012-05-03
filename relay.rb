@@ -6,16 +6,16 @@ require 'hipchat'
 require 'httparty'
 require 'time'
 
-require './lib/hipchat_notifier'
-require './lib/pivotal_ping'
-require './lib/salesforce'
-
 if File.exist?('./env')
   File.read('./env').each_line do |line|
     k,v = line.chomp.split('=', 2)
     ENV[k] = v if k
   end
 end
+
+require './lib/hipchat_notifier'
+require './lib/pivotal_ping'
+require './lib/salesforce'
 
 helpers do
   def h(text)
