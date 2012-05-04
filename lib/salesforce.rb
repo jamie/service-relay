@@ -36,7 +36,7 @@ class Salesforce
   def get_cases
     url = "#{API_BASE}/query/"
     query = "SELECT id, subject, description, createddate, " +
-      "suppliedname, status from Case where Status LIKE 'Escalated%'"
+      "suppliedname, suppliedcompany, status from Case where Status LIKE 'Escalated%'"
     @response = HTTParty.get(
       url,
       :query => { :q => query },

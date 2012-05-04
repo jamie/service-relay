@@ -70,7 +70,7 @@ __END__
     <external_id><%= c['Id'] %></external_id>
     <name><%= c['Subject'] %></name>
     <description><%= h c['Description'] %></description>
-    <requested_by><%= c['SuppliedName'] %></requested_by>
+    <requested_by><%= c['SuppliedCompany'] || c['SuppliedName'] %></requested_by>
     <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
     <story_type><%= story_type(c['Status']) %></story_type>
     <estimate type="integer">-1</estimate>
