@@ -17,6 +17,7 @@ require './lib/salesforce_pivotal_formatter'
 
 helpers do
   def protected!
+    return if ENV['RACK_ENV'] == 'development'
     unless authorized?
       response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
       throw(:halt, [401, "Not authorized\n"])
