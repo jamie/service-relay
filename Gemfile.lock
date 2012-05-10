@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.7)
+    builder (3.0.0)
     heroku (2.24.0)
       launchy (>= 0.3.2)
       netrc (~> 0.7.1)
@@ -16,6 +17,7 @@ GEM
     launchy (2.1.0)
       addressable (~> 2.2.6)
     mime-types (1.18)
+    minitest (3.0.0)
     multi_json (1.2.0)
     multi_xml (0.4.2)
     netrc (0.7.1)
@@ -36,9 +38,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  builder
   heroku
   hipchat
   httparty
   json
+  minitest
   nokogiri
   sinatra

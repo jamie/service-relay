@@ -6,25 +6,16 @@ require 'hipchat'
 require 'httparty'
 require 'time'
 require 'json'
+require 'builder'
 
 require './lib/load_dev_env'
 
 require './lib/hipchat_notifier'
 require './lib/pivotal_ping'
 require './lib/salesforce'
+require './lib/salesforce_pivotal_formatter'
 
 helpers do
-  def h(text)
-    text.gsub('<', '%3C').gsub('>','%3E')
-  end
-
-  def story_type(k)
-    { 'Escalated--Defect'  => 'bug',
-      'Escalated--Feature' => 'feature',
-      'Escalated--Task'    => 'chore'
-    }[k]
-  end
-
   def protected!
     unless authorized?
       response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
@@ -54,27 +45,11 @@ get '/salesforce/to/pivotal' do
   protected!
   @cases = Salesforce.new.get_cases
   content_type 'application/json'
-  erb :pt_import_xml
+  SalesforcePivotalFormatter.new(@cases).to_xml
 end
 
 __END__
 
 @@ index
 <html><body>No content</body></html>
-
-@@ pt_import_xml
-<?xml version="1.0" encoding="UTF-8"?>
-<external_stories type="array">
-<% @cases.each do |c| %>
-  <external_story>
-    <external_id><%= c['Id'] %></external_id>
-    <name><%= c['Subject'] %></name>
-    <description><%= h c['Description'] %></description>
-    <requested_by><%= c['SuppliedCompany'] || c['SuppliedName'] %></requested_by>
-    <created_at type="datetime"><%= Time.parse(c['CreatedDate']).strftime('%Y/%m/%d %H:%M:%S UTC') %></created_at>
-    <story_type><%= story_type(c['Status']) %></story_type>
-    <estimate type="integer">-1</estimate>
-  </external_story>
-<% end %>
-</external_stories>
 

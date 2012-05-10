@@ -6,4 +6,6 @@ gem 'nokogiri'
 gem 'hipchat'
 gem 'httparty'
 gem 'json'
+gem 'builder'
+gem 'minitest'
 
