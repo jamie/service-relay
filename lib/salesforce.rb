@@ -32,7 +32,7 @@ class Salesforce
       }
     )
   end
-
+  
   def load_case(id)
     url = "#{API_BASE}/sobjects/Case/#{id}"
     HTTParty.get(

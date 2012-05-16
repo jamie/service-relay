@@ -25,7 +25,7 @@ class SalesforcePivotalFormatter
         x.external_story do |story|
           story.external_id c['Id']
           story.name c['Subject']
-          story.description c['Description']
+          story.description c['Developer_Instructions__c']
           story.requested_by(c['SuppliedCompany'] || c['SuppliedName'])
           story.created_at(format_timestamp(c['CreatedDate']), :type => 'datetime')
           story.story_type story_type(c['Status'])
