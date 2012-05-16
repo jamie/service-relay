@@ -46,7 +46,7 @@ class Salesforce
 
   def get_cases
     url = "#{API_BASE}/query/"
-    query = "SELECT id, subject, description, createddate, " +
+    query = "SELECT id, subject, description, Developer_Instructions__c, createddate, " +
       "suppliedname, suppliedcompany, status from Case where Status LIKE 'Escalated%'"
     @response = HTTParty.get(
       url,
