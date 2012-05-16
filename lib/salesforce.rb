@@ -33,6 +33,17 @@ class Salesforce
     )
   end
 
+  def load_case(id)
+    url = "#{API_BASE}/sobjects/Case/#{id}"
+    HTTParty.get(
+      url,
+      :headers => {
+        'Authorization' => "OAuth #{session_id}",
+        'X-PrettyPrint' => '1'
+      }
+    ).parsed_response
+  end
+
   def get_cases
     url = "#{API_BASE}/query/"
     query = "SELECT id, subject, description, createddate, " +
