@@ -1,3 +1,9 @@
+class Object
+  def blank?
+    nil? or (respond_to?(:empty?) && empty?)
+  end
+end
+
 class Salesforce
   OAUTH_ENDPOINT = "https://login.salesforce.com/services/oauth2/authorize"
   TOKEN_ENDPOINT = "https://login.salesforce.com/services/oauth2/token"
@@ -56,7 +62,7 @@ class Salesforce
         'X-PrettyPrint' => '1'
       }
     )
-    @response["records"]
+    @response["records"].reject{|e|e['Developer_Instructions__c'].blank?}
   end
 
   def process_update(update)
