@@ -16,8 +16,11 @@ GEM
     json (1.7.0)
     launchy (2.1.0)
       addressable (~> 2.2.6)
+    metaclass (0.0.1)
     mime-types (1.18)
     minitest (3.0.0)
+    mocha (0.11.4)
+      metaclass (~> 0.0.1)
     multi_json (1.2.0)
     multi_xml (0.4.2)
     netrc (0.7.1)
@@ -44,5 +47,6 @@ DEPENDENCIES
   httparty
   json
   minitest
+  mocha
   nokogiri
   sinatra

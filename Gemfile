@@ -9,3 +9,4 @@ gem 'json'
 gem 'builder'
 gem 'minitest'
 
+gem 'mocha'
