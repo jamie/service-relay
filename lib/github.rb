@@ -1,4 +1,5 @@
 require 'httparty'
+require 'ostruct'
 
 class Github
   include HTTParty
@@ -32,13 +33,18 @@ class Github
   end
 
   def create_branch(name, from='master')
+    name = sanitize(name)
     body = {
       'ref' => "refs/heads/#{name}",
       'sha' => branches[from]
     }.to_json
     post("/repos/#{@repo}/git/refs", :body => body)
+    OpenStruct.new(:url => "https://github.com/#{@repo}/tree/#{name}", :name => name)
   end
 
 
+private
+  def sanitize(str)
+    (str.downcase.split(/[^a-z]+/) - ['']).join('-')
+  end
 end
-

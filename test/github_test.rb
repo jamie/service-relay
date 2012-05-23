@@ -24,6 +24,15 @@ describe Github do
 
       @github.create_branch('this-is-a-test')
     end
+
+    it "sanitizes the branch name" do
+      @github.expects(:branches).returns('master' => 'abcdef')
+      @github.expects(:post).with do |url, opts|
+        JSON.parse(opts[:body])['ref'] == 'refs/heads/this-is-a-test'
+      end
+
+      @github.create_branch(' This is! (a test 123) ')
+    end
   end
 end
 
