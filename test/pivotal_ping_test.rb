@@ -47,12 +47,12 @@ describe PivotalPing do
 
   describe :edit? do
     it "detects edits" do
-      @ping.must_be :edit?
+      @ping.must_be :edited?
     end
 
     it "detects non-edits" do
       @ping.description = 'Jamie Macey started "a story"'
-      @ping.wont_be :edit?
+      @ping.wont_be :edited?
     end
   end
 end
