@@ -35,6 +35,8 @@ before do
   hipchat_client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
   @hipchat = hipchat_client[ENV['HIPCHAT_ROOM'].gsub('_', ' ')]
   @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
+
+  @services = {:github => @github, :hipchat => @hipchat}
 end
 
 get '/' do
@@ -44,15 +46,26 @@ end
 WEBHOOKS = {
   'pivotal' => PivotalPing
 }
+WEBHOOK_ACTIONS = {
+  'pivotal' => [
+    lambda {|ping, services|
+      next if ping.edited?
+      services[:hipchat].send('Pivotal Tracker', ping.description)
+    },
+    lambda {|ping, services|
+      next unless ping.started? && !ping.chore?
+      services[:github].create_branch(ping.stories.first.title)
+    },
+    lambda {|ping, services|
+      Salesforce.new.process_update(ping)
+    }
+  ]
+}
 
 post '/:service/webhook' do
   ping = WEBHOOKS[params[:service]].new(request.body.read)
-  unless ping.edited?
-    @hipchat.send('Pivotal Tracker', ping.description)
-  end
-  Salesforce.new.process_update(ping)
-  if ping.started? && !ping.chore?
-    @github.create_branch(ping.stories.first.title)
+  WEBHOOK_ACTIONS[params[:service]].each do |action|
+    action.call(ping, @services)
   end
   'OK'
 end
