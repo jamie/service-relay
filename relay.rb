@@ -33,7 +33,7 @@ end
 
 before do
   hipchat_client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
-  @hipchat = hipchat_client[ENV['HIPCHAT_ROOM']].gsub('_', ' ')
+  @hipchat = hipchat_client[ENV['HIPCHAT_ROOM'].gsub('_', ' ')]
   @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
 end
 
