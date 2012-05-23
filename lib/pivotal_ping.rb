@@ -1,17 +1,24 @@
 require 'date'
 require 'nokogiri'
+require 'lib/pivotal'
 require 'pp'
 
 class PivotalPing
   class PivotalStory
     attr_reader :id, :url, :state, :integration_id, :other_id
 
-    def initialize(xml)
+    def initialize(xml, parent)
       @id    = xml.xpath('id').first.content.to_i
       @url   = xml.xpath('url').first.content
       @state = xml.xpath('current_state').first.content rescue ''
       @integration_id = xml.xpath('integration_id').first.content.to_i rescue nil
       @other_id = xml.xpath('other_id').first.content rescue nil
+
+      @parent = parent
+    end
+
+    def api
+      Pivotal.new(ENV['PIVOTAL_TOKEN'])
     end
 
     def to_hash
@@ -21,12 +28,32 @@ class PivotalPing
       }
     end
 
-    def chore?
-      false
+    def load
+      return unless @name.nil?
+      self.load!
     end
 
-    def title
-      nil
+    def load!
+      url = "/projects/#{@parent.project_id}/stories/#{@id}"
+      story = api.get(url).parsed_response['story']
+      @name        = story['name']
+      @description = story['description']
+      @story_type  = story['story_type']
+    end
+
+    def add_comment(comment)
+      url = "/projects/#{@parent.project_id}/stories/#{@id}/notes"
+      api.post(url, :body => {:note => {:text => comment }})
+    end
+
+    def chore?
+      self.load
+      @story_type == 'chore'
+    end
+
+    def name
+      self.load
+      @name
     end
   end
 
@@ -41,7 +68,7 @@ class PivotalPing
     @author      = xml.xpath('activity/author').first.content
     @project_id  = xml.xpath('activity/project_id').first.content.to_i
     @description = xml.xpath('activity/description').first.content
-    @stories = xml.xpath('activity/stories/story').map{|x|PivotalStory.new(x)}
+    @stories = xml.xpath('activity/stories/story').map{|x|PivotalStory.new(x, self)}
   end
 
   def story_ids
