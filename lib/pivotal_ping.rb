@@ -20,6 +20,14 @@ class PivotalPing
         :current_state => @state
       }
     end
+
+    def chore?
+      false
+    end
+
+    def title
+      nil
+    end
   end
 
   attr_reader :id, :version, :event_type, :occurred_at, :author, :project_id, :description, :stories
@@ -52,9 +60,19 @@ class PivotalPing
     }
   end
 
-  # Did someone just edit the story?
-  def edit?
+  # Is notification about a chore?
+  def chore?
+    @stories.any? {|story| story.chore? }
+  end
+
+  # Is notification about an edit action?
+  def edited?
     @description =~ /^[^"].*edited "/
+  end
+
+  # Is notification about someone starting a story?
+  def started?
+    @description =~ /^[^"].*started "/
   end
 end
 

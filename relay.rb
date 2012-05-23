@@ -10,6 +10,7 @@ require 'builder'
 
 require './lib/load_dev_env'
 
+require './lib/github.rb'
 require './lib/pivotal_ping'
 require './lib/salesforce'
 require './lib/salesforce_pivotal_formatter'
@@ -32,7 +33,8 @@ end
 
 before do
   hipchat_client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
-  @hipchat = hipchat_client[ENV['HIPCHAT_ROOM'].gsub('_', ' ')
+  @hipchat = hipchat_client[ENV['HIPCHAT_ROOM']].gsub('_', ' ')
+  @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
 end
 
 get '/' do
@@ -41,10 +43,13 @@ end
 
 post '/pivotal/webhook' do
   ping = PivotalPing.new(request.body.read)
-  unless ping.edit?
+  unless ping.edited?
     @hipchat.send('Pivotal Tracker', ping.description)
   end
   Salesforce.new.process_update(ping)
+  if ping.started? && !ping.chore?
+    @github.create_branch(ping.stories.first.title)
+  end
   'OK'
 end
 
