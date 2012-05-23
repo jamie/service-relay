@@ -1,6 +1,6 @@
 require 'date'
 require 'nokogiri'
-require 'lib/pivotal'
+require './lib/pivotal'
 require 'pp'
 
 class PivotalPing
