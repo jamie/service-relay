@@ -59,7 +59,7 @@ WEBHOOK_ACTIONS = {
       story = ping.stories.first
       next unless ping.started? && story && !story.chore?
       branch = services[:github].create_branch(story.name)
-      msg = "Created branch: <a href='#{branch.url}'>#{branch.name}</a>"
+      msg = "Branched #{branch.name} - #{branch.url}"
       story.add_note(msg)
     },
     lambda {|ping, services|
