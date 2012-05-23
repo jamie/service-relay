@@ -12,7 +12,6 @@ class Pivotal
   def get(path, options={})
     options[:headers] ||= {}
     options[:headers]['X-TrackerToken'] = @token
-p [path, options]
     self.class.get(path, options)
   end
 

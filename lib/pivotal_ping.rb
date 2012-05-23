@@ -41,9 +41,9 @@ class PivotalPing
       @story_type  = story['story_type']
     end
 
-    def add_comment(comment)
+    def add_note(msg)
       url = "/projects/#{@parent.project_id}/stories/#{@id}/notes"
-      api.post(url, :body => {:note => {:text => comment }})
+      api.post(url, :body => {:note => {:text => msg }})
     end
 
     def chore?
