@@ -35,8 +35,9 @@ before do
   hipchat_client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
   @hipchat = hipchat_client[ENV['HIPCHAT_ROOM'].gsub('_', ' ')]
   @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
+  @pivotal = Pivotal.new(ENV['PIVOTAL_TOKEN'])
 
-  @services = {:github => @github, :hipchat => @hipchat}
+  @services = {:github => @github, :hipchat => @hipchat, :pivotal => @pivotal}
 end
 
 get '/' do
@@ -49,12 +50,17 @@ WEBHOOKS = {
 WEBHOOK_ACTIONS = {
   'pivotal' => [
     lambda {|ping, services|
+      # Inform hipchat of all non-edit actions
       next if ping.edited?
       services[:hipchat].send('Pivotal Tracker', ping.description)
     },
     lambda {|ping, services|
-      next unless ping.started? && !ping.chore?
-      services[:github].create_branch(ping.stories.first.title)
+      # When a non-chore is started, auto-create a topic branch for it
+      story = ping.stories.first
+      next unless ping.started? && story && !story.chore?
+      branch = services[:github].create_branch(story.name)
+      msg = "Created branch: <a href='#{branch.url}'>#{branch.name}</a>"
+      story.add_note(msg)
     },
     lambda {|ping, services|
       Salesforce.new.process_update(ping)
