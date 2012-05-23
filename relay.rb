@@ -41,8 +41,12 @@ get '/' do
   erb :index
 end
 
-post '/pivotal/webhook' do
-  ping = PivotalPing.new(request.body.read)
+WEBHOOKS = {
+  'pivotal' => PivotalPing
+}
+
+post '/:service/webhook' do
+  ping = WEBHOOKS[params[:service]].new(request.body.read)
   unless ping.edited?
     @hipchat.send('Pivotal Tracker', ping.description)
   end
