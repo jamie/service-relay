@@ -10,7 +10,6 @@ require 'builder'
 
 require './lib/load_dev_env'
 
-require './lib/hipchat_notifier'
 require './lib/pivotal_ping'
 require './lib/salesforce'
 require './lib/salesforce_pivotal_formatter'
@@ -31,13 +30,20 @@ helpers do
 
 end
 
+before do
+  hipchat_client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
+  @hipchat = hipchat_client[ENV['HIPCHAT_ROOM'].gsub('_', ' ')
+end
+
 get '/' do
   erb :index
 end
 
 post '/pivotal/webhook' do
   ping = PivotalPing.new(request.body.read)
-  HipchatNotifier.new.process(ping)
+  unless ping.edit?
+    @hipchat.send('Pivotal Tracker', ping.description)
+  end
   Salesforce.new.process_update(ping)
   'OK'
 end

@@ -51,5 +51,10 @@ class PivotalPing
       :stories => @stories.map{|e|e.to_hash}
     }
   end
+
+  # Did someone just edit the story?
+  def edit?
+    @description =~ /^[^"].*edited "/
+  end
 end
 

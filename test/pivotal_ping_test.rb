@@ -1,6 +1,10 @@
 require './test/test_helper'
 require './lib/pivotal_ping'
 
+class PivotalPing
+  attr_writer :description
+end
+
 UPDATE_2 = <<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <activity>
@@ -39,6 +43,17 @@ describe PivotalPing do
         {:id => 27783807, :current_state => "unscheduled", :url => "http://www.pivotaltracker.com/services/v3/projects/519145/stories/27783807"}
       ]
     })
+  end
+
+  describe :edit? do
+    it "detects edits" do
+      @ping.must_be :edit?
+    end
+
+    it "detects non-edits" do
+      @ping.description = 'Jamie Macey started "a story"'
+      @ping.wont_be :edit?
+    end
   end
 end
 
