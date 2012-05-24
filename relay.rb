@@ -10,7 +10,8 @@ require 'builder'
 
 require './lib/load_dev_env'
 
-require './lib/github.rb'
+require './lib/github'
+require './lib/hipchat'
 require './lib/pivotal_ping'
 require './lib/salesforce'
 require './lib/salesforce_pivotal_formatter'
@@ -32,8 +33,7 @@ helpers do
 end
 
 before do
-  hipchat_client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
-  @hipchat = hipchat_client[ENV['HIPCHAT_ROOM'].gsub('_', ' ')]
+  @hipchat = Hipchat.new(ENV['HIPCHAT_TOKEN'], ENV['HIPCHAT_ROOM']]
   @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
   @pivotal = Pivotal.new(ENV['PIVOTAL_TOKEN'])
 
@@ -52,14 +52,15 @@ WEBHOOK_ACTIONS = {
     lambda {|ping, services|
       # Inform hipchat of all non-edit actions
       next if ping.edited?
-      services[:hipchat].send('Pivotal Tracker', ping.description)
+      msg = HipChatFormatter.format(ping.description)
+      services[:hipchat].send('Pivotal Tracker', msg)
     },
     lambda {|ping, services|
       # When a non-chore is started, auto-create a topic branch for it
       story = ping.stories.first
       next unless ping.started? && story && !story.chore?
       branch = services[:github].create_branch(story.name)
-      msg = "Branched #{branch.name} - #{branch.url}"
+      msg = "Branched *#{branch.name}* - #{branch.url}"
       story.add_note(msg)
     },
     lambda {|ping, services|
