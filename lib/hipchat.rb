@@ -13,10 +13,6 @@ class Hipchat
     @hipchat ||= HipChat::Client.new(@token)
   end
 
-  def room
-    @room ||= hipchat[@room]
-  end
-
   def format_message(msg)
     msg.
       gsub(URL_REGEX, '<a href="\1">\1</a>').
@@ -25,7 +21,7 @@ class Hipchat
 
   def send(speaker, message, color='yellow')
     message = format_message(message) unless message =~ /<(a-z)+>/
-    room.send(speaker, message)
+    hipchat[@room].send(speaker, message)
   end
 
 end
