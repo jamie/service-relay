@@ -52,8 +52,7 @@ WEBHOOK_ACTIONS = {
     lambda {|ping, services|
       # Inform hipchat of all non-edit actions
       next if ping.edited?
-      msg = HipChatFormatter.format(ping.description)
-      services[:hipchat].send('Pivotal Tracker', msg)
+      services[:hipchat].send('Pivotal Tracker', ping.description)
     },
     lambda {|ping, services|
       # When a non-chore is started, auto-create a topic branch for it
