@@ -33,7 +33,7 @@ helpers do
 end
 
 before do
-  @hipchat = Hipchat.new(ENV['HIPCHAT_TOKEN'], ENV['HIPCHAT_ROOM']]
+  @hipchat = Hipchat.new(ENV['HIPCHAT_TOKEN'], ENV['HIPCHAT_ROOM'])
   @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
   @pivotal = Pivotal.new(ENV['PIVOTAL_TOKEN'])
 
