@@ -20,11 +20,11 @@ helpers do
 end
 
 before do
-  @hipchat = Hipchat.new(ENV['HIPCHAT_TOKEN'], ENV['HIPCHAT_ROOM'])
-  @github = Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO'])
-  @pivotal = Pivotal.new(ENV['PIVOTAL_TOKEN'])
-
-  @services = {:github => @github, :hipchat => @hipchat, :pivotal => @pivotal}
+  @services = {
+    :github  => Github.new(ENV['GITHUB_TOKEN'], ENV['GITHUB_REPO']),
+    :hipchat => Hipchat.new(ENV['HIPCHAT_TOKEN'], ENV['HIPCHAT_ROOM']),
+    :pivotal => Pivotal.new(ENV['PIVOTAL_TOKEN'])
+  }
 end
 
 get '/' do
