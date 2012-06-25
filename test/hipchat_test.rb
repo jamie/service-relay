@@ -13,6 +13,12 @@ describe Hipchat do
       @hipchat.format_message(msg).must_equal expected
     end
 
+    it "doesn't link existing links" do
+      msg = '<a href="http://example.com">example</a>'
+      expected = '<a href="http://example.com">example</a>'
+      @hipchat.format_message(msg).must_equal expected
+    end
+
     it "bolds" do
       {
         'hi *you*' => 'hi <strong>you</strong>',
