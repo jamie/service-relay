@@ -79,7 +79,7 @@ describe PivotalPing do
   describe :enhance! do
     it "links stories" do
       @ping.enhance!
-      @ping.description.must_match %r(<a href)
+      @ping.description.must_match %r(\<a href)
       @ping.description.must_match %r(>test "one"<)
       @ping.description.must_match @ping.stories.first.url
     end

@@ -90,7 +90,7 @@ class PivotalPing
   def enhance!
     if event_type == 'story_update'
       quote = description.match(/"(.*)"/)[1]
-      description.sub!(quote, %(<a href="#{@stories.first.url}>#{quote}</a>"))
+      description.sub!(quote, %(<a href="#{@stories.first.url}">#{quote}</a>))
     end
     self
   end
