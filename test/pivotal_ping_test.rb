@@ -14,7 +14,7 @@ STORY_UPDATE = <<XML
   <occurred_at type="datetime">2012/04/10 16:34:17 UTC</occurred_at>
   <author>Jamie Macey</author>
   <project_id type="integer">519145</project_id>
-  <description>Jamie Macey edited &quot;test one&quot;</description>
+  <description>Jamie Macey edited &quot;test &quot;one&quot;&quot;</description>
   <stories type="array">
     <story>
       <id type="integer">27783807</id>
@@ -58,7 +58,7 @@ describe PivotalPing do
       :occurred_at => DateTime.new(2012, 4, 10, 16, 34, 17).to_s,
       :author => 'Jamie Macey',
       :project_id => 519145,
-      :description => 'Jamie Macey edited "test one"',
+      :description => 'Jamie Macey edited "test "one""',
       :stories => [
         {:id => 27783807, :current_state => "unscheduled", :url => "http://www.pivotaltracker.com/services/v3/projects/519145/stories/27783807"}
       ]
@@ -73,6 +73,15 @@ describe PivotalPing do
     it "detects non-edits" do
       @ping.description = 'Jamie Macey started "a story"'
       @ping.wont_be :edited?
+    end
+  end
+
+  describe :enhance! do
+    it "links stories" do
+      @ping.enhance!
+      @ping.description.must_match %r(<a href)
+      @ping.description.must_match %r(>test "one"<)
+      @ping.description.must_match @ping.stories.first.url
     end
   end
 end

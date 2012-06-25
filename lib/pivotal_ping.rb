@@ -87,6 +87,14 @@ class PivotalPing
     }
   end
 
+  def enhance!
+    if event_type == 'story_update'
+      quote = description.match(/"(.*)"/)[1]
+      description.sub!(quote, %(<a href="#{@stories.first.url}>#{quote}</a>"))
+    end
+    self
+  end
+
   # Is notification about a chore?
   def chore?
     @stories.any? {|story| story.chore? }
