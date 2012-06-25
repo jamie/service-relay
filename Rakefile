@@ -8,6 +8,10 @@ Rake::TestTask.new do |t|
   t.pattern = "test/*_test.rb"
 end
 
+task :environment do
+  require './lib/environment'
+end
+
 desc "Show all fields available from salesforce"
 task :salesforce_debug do
   require './relay'
@@ -16,3 +20,8 @@ task :salesforce_debug do
   pp force.load_case(@cases.first['Id'])
 end
 
+desc "Send a manual message to hipchat"
+task :hipchat_say => :environment do
+  hipchat = Hipchat.new(ENV['HIPCHAT_TOKEN'], ENV['HIPCHAT_ROOM'])
+  hipchat.send('Test', ENV['MSG'], ENV['COLOR'])
+end

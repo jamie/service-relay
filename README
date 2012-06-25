@@ -2,8 +2,23 @@ A quick and dirty middleman for getting updates from Pivotal Tracker into HipCha
 
 Set up to run direct on heroku, just clone and set up a (bamboo) Heroku app, and set up the following environment keys via heroku config:add:
 
-    HIPCHAT_TOKEN - api token from hipchat, notification-only expected
+    BASIC_AUTH - login:password for basic authentication of some URLs
+    
+    GITHUB_REPO - user/repo for default github hooks
+    GITHUB_TOKEN - API token of a user on github with permission to that repo
+    
     HIPCHAT_ROOM - name of the room to dump updates into
+    HIPCHAT_TOKEN - api token from hipchat, notification-only expected
+    
+    PIVOTAL_SF_INTEGRATION_ID - Pivotal Tracker's integration ID for imported salesforce issues
+    PIVOTAL_TOKEN - api token for Pivotal Tracker
+    
+    SF_CONSUMER_KEY - Consumer key for Salesforce to import issues
+    SF_CONSUMER_SECRET - Consumer secret for Salesforce to import issues
+    SF_LOGIN - User account on salesforce
+    SF_PASSWORD - User password on Salesforce
+    SF_SERVER - Domain name attached to Salesforce account (-api version)
+    SF_TOKEN - User token on salesforce
 
 If you want to run not on Heroku, you can provide those two variables in a file called `env` in the project root, the format is `KEY=value`, one per line, no spaces or padding.
 
