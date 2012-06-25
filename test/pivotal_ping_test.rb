@@ -5,7 +5,7 @@ class PivotalPing
   attr_writer :description
 end
 
-UPDATE_2 = <<XML
+STORY_UPDATE = <<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <activity>
   <id type="integer">182280221</id>
@@ -25,9 +25,29 @@ UPDATE_2 = <<XML
 </activity>
 XML
 
+NOTE_CREATE = <<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<activity>
+  <id type="integer">212616375</id>
+  <version type="integer">1684</version>
+  <event_type>note_create</event_type>
+  <occurred_at type="datetime">2012/06/25 18:59:47 UTC</occurred_at>
+  <author>Jamie Macey</author>
+  <project_id type="integer">519145</project_id>
+  <description>Jamie Macey added comment: &quot;test&quot;</description>
+  <stories type="array">
+    <story>
+      <id type="integer">27783807</id>
+      <url>http://www.pivotaltracker.com/services/v3/projects/519145/stories/27783807</url>
+      <current_state></current_state>
+    </story>
+  </stories>
+</activity>
+XML
+
 describe PivotalPing do
   before do
-    @ping = PivotalPing.new(UPDATE_2)
+    @ping = PivotalPing.new(STORY_UPDATE)
   end
 
   it "converts to hash" do
