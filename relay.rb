@@ -39,6 +39,7 @@ WEBHOOK_ACTIONS = {
     lambda {|ping, services|
       # Inform hipchat of all non-edit actions
       next if ping.edited?
+      pp ping
       services[:hipchat].send('Pivotal Tracker', ping.description)
     },
     lambda {|ping, services|
