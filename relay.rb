@@ -56,7 +56,6 @@ WEBHOOK_ACTIONS = {
 }
 
 post '/:service/webhook' do
-  puts request.body.read
   request.body.rewind
   ping = WEBHOOKS[params[:service]].new(request.body.read)
   WEBHOOK_ACTIONS[params[:service]].each do |action|
