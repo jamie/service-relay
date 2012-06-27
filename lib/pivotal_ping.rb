@@ -55,6 +55,10 @@ class PivotalPing
       self.load
       @name
     end
+
+    def web_url
+      @url.gsub(%r{/services/v3}, '').gsub('http:', 'https:')
+    end
   end
 
   attr_reader :id, :version, :event_type, :occurred_at, :author, :project_id, :description, :stories
@@ -90,7 +94,7 @@ class PivotalPing
   def enhance!
     if %w(story_create story_update).include? event_type
       quote = description.match(/"(.*)"/)[1]
-      description.sub!(quote, %(<a href="#{@stories.first.url}">#{quote}</a>))
+      description.sub!(quote, %(<a href="#{@stories.first.web_url}">#{quote}</a>))
     end
     self
   end
