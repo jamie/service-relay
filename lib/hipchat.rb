@@ -20,13 +20,12 @@ class Hipchat
       gsub(/(^|\s)\*(.*\w.*)\*(\s|$)/, '\1<strong>\2</strong>\3')
   end
 
-  def send(speaker, message, color=nil)
+  def send(speaker, message, opts = {})
     message = format_message(message) unless message =~ /<[a-z]+/
-    color ||= 'yellow'
-    unless %w(yellow red green purple random).include? color
+    unless opts[:color] && %w(yellow red green purple random).include?(opts[:color])
       raise ArgumentError, "Invalid message color: #{color}"
     end
-    hipchat[@room].send(speaker, message, :color => color)
+    hipchat[@room].send(speaker, message, opts)
   end
 
 end
