@@ -79,7 +79,7 @@ describe PivotalPing do
   describe :enhance! do
     it "links stories" do
       @ping.enhance!
-      @ping.description.must_equal %(Jamie Macey edited "<a href="#{@ping.stories.first.url}">test "one"</a>")
+      @ping.description.must_equal %(Jamie Macey edited "<a href="https://www.pivotaltracker.com/projects/519145/stories/27783807">test "one"</a>")
     end
   end
 end
