@@ -14,8 +14,8 @@ describe Hipchat do
     end
 
     it "doesn't link existing links" do
-      msg = '<a href="http://example.com/">example</a>'
-      expected = '<a href="http://example.com/">example</a>'
+      msg = 'Jamie edited "<a href="http://example.com/">example</a>"'
+      expected = 'Jamie edited "<a href="http://example.com/">example</a>"'
       @hipchat.format_message(msg).must_equal expected
     end
 

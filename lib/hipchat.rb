@@ -21,7 +21,7 @@ class Hipchat
   end
 
   def send(speaker, message, color=nil)
-    message = format_message(message) unless message =~ /<(a-z)+>/
+    message = format_message(message) unless message =~ /<[a-z]+/
     color ||= 'yellow'
     unless %w(yellow red green purple random).include? color
       raise ArgumentError, "Invalid message color: #{color}"
