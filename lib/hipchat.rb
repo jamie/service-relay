@@ -22,7 +22,7 @@ class Hipchat
 
   def send(speaker, message, opts = {})
     message = format_message(message) unless message =~ /<[a-z]+/
-    if opts[:color] && !%w(yellow red green purple random).include?(opts[:color])
+    if opts && opts[:color] && !%w(yellow red green purple random).include?(opts[:color])
       raise ArgumentError, "Invalid message color: #{opts[:color]}"
     end
     hipchat[@room].send(speaker, message, opts)
