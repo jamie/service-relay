@@ -22,6 +22,7 @@ class SalesforcePivotalFormatter
     builder.instruct! :xml, :version => '1.0'
     builder.external_stories(:type => 'array') do |x|
       @cases.each do |c|
+        next unless story_type(c['Status'])
         x.external_story do |story|
           story.external_id c['Id']
           story.name c['Subject']
